@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - BengkuluGift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#b45309',secondary:'#92400e',accent:'#fef3c7'}}}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+        @keyframes countUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .count-anim { animation: countUp 0.6s ease both; }
+        .stat-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+    </style>
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex h-screen overflow-hidden relative">
+
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white flex flex-col flex-shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="p-5 flex items-center gap-3 border-b border-gray-800">
+            <img src="/img/logo.png" alt="BengkuluGift Logo" class="w-10 h-10 object-contain">
+            <div>
+                <span class="font-display font-bold text-lg">BengkuluGift</span>
+                <p class="text-xs text-gray-400">Admin Panel</p>
+            </div>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="/pages/admin/dashboard.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl bg-primary/20 text-primary font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Dashboard
+            </a>
+            <a href="/pages/admin/" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Validasi Pembayaran
+            </a>
+            <a href="/pages/admin/products.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                Kelola Produk
+            </a>
+            <a href="/pages/admin/categories.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                Kelola Kategori
+            </a>
+            <a href="/pages/admin/users.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Kelola Pengguna
+            </a>
+            <a href="/pages/admin/reviews.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                Kelola Ulasan
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">A</div>
+                <div>
+                    <p class="text-sm font-medium">Admin</p>
+                    <p class="text-xs text-gray-400">Super Admin</p>
+                </div>
+            </div>
+            <button onclick="logout()" class="w-full flex items-center gap-2 py-2 px-4 text-red-400 hover:bg-gray-800 rounded-lg transition-colors text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Keluar
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="toggleSidebar()"></div>
+    <div class="flex-1 overflow-y-auto md:ml-64">
+        <!-- Top Bar -->
+        <div class="bg-white border-b px-4 md:px-8 py-4 flex items-center gap-3 justify-between sticky top-0 z-10">
+        <button class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex-shrink-0" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+                <h1 class="font-display font-bold text-2xl text-gray-800">Dashboard Analytics</h1>
+                <p class="text-sm text-gray-500" id="dateNow"></p>
+            </div>
+            <a href="/" target="_blank" class="flex items-center gap-2 text-sm text-primary font-medium hover:text-secondary transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                Lihat Toko
+            </a>
+        </div>
+
+        <div class="p-4 md:p-8">
+            <!-- Stat Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 text-white shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-blue-100 text-sm font-medium">Total Pengguna</p>
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                    </div>
+                    <p class="font-display font-bold text-4xl count-anim" id="totalUsers">-</p>
+                    <p class="text-blue-200 text-xs mt-2">Pengguna terdaftar</p>
+                </div>
+
+                <div class="stat-card bg-gradient-to-br from-amber-500 to-amber-700 rounded-2xl p-6 text-white shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-amber-100 text-sm font-medium">Total Produk</p>
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        </div>
+                    </div>
+                    <p class="font-display font-bold text-4xl count-anim" id="totalProducts">-</p>
+                    <p class="text-amber-200 text-xs mt-2">Produk aktif tersedia</p>
+                </div>
+
+                <div class="stat-card bg-gradient-to-br from-green-500 to-green-700 rounded-2xl p-6 text-white shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-green-100 text-sm font-medium">Total Pesanan</p>
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        </div>
+                    </div>
+                    <p class="font-display font-bold text-4xl count-anim" id="totalOrders">-</p>
+                    <p class="text-green-200 text-xs mt-2">Semua pesanan masuk</p>
+                </div>
+
+                <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-6 text-white shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-purple-100 text-sm font-medium">Total Pendapatan</p>
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                    </div>
+                    <p class="font-display font-bold text-2xl count-anim" id="totalRevenue">-</p>
+                    <p class="text-purple-200 text-xs mt-2">Dari pesanan validated</p>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Order Status Chart -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h2 class="font-display font-bold text-lg text-gray-800 mb-6">Status Pesanan</h2>
+                    <div class="relative h-64">
+                        <canvas id="orderStatusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <h2 class="font-display font-bold text-lg text-gray-800 mb-6">Pesanan per Bulan (Tahun Ini)</h2>
+                    <div class="relative h-64">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Recent Orders -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="font-display font-bold text-lg text-gray-800">Pesanan Terbaru</h2>
+                        <a href="/pages/admin/" class="text-primary text-sm font-medium hover:text-secondary">Lihat Semua →</a>
+                    </div>
+                    <div id="recentOrdersList" class="space-y-3">
+                        <p class="text-gray-400 text-sm text-center py-4">Memuat...</p>
+                    </div>
+                </div>
+
+                <!-- Top Products -->
+                <div class="bg-white rounded-2xl shadow p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="font-display font-bold text-lg text-gray-800">Produk Terlaris</h2>
+                        <a href="/pages/admin/products.html" class="text-primary text-sm font-medium hover:text-secondary">Kelola →</a>
+                    </div>
+                    <div id="topProductsList" class="space-y-3">
+                        <p class="text-gray-400 text-sm text-center py-4">Memuat...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (localStorage.getItem('role') !== 'admin') {
+        Swal.fire({ icon:'error', title:'Akses Ditolak', text:'Anda bukan admin.' }).then(() => window.location.href = '/');
+    }
+
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': 'Bearer ' + token };
+
+    // Date display
+    document.getElementById('dateNow').textContent = new Date().toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+    async function loadDashboard() {
+        try {
+            const [usersRes, productsRes, ordersRes] = await Promise.all([
+                fetch('/api/users', { headers }),
+                fetch('/api/products'),
+                fetch('/api/orders/all', { headers })
+            ]);
+
+            const users = usersRes.ok ? await usersRes.json() : [];
+            const products = productsRes.ok ? await productsRes.json() : [];
+            const orders = ordersRes.ok ? await ordersRes.json() : [];
+
+            // Stats
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+
+            const revenue = orders.filter(o => o.status === 'validated').reduce((s, o) => s + parseFloat(o.total_amount), 0);
+            document.getElementById('totalRevenue').textContent = 'Rp ' + revenue.toLocaleString('id-ID');
+
+            // Order Status Chart
+            const statuses = { pending: 0, paid: 0, validated: 0, cancelled: 0 };
+            orders.forEach(o => { if(statuses[o.status] !== undefined) statuses[o.status]++; });
+            new Chart(document.getElementById('orderStatusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Dibayar', 'Tervalidasi', 'Dibatalkan'],
+                    datasets: [{
+                        data: Object.values(statuses),
+                        backgroundColor: ['#f59e0b','#3b82f6','#22c55e','#ef4444'],
+                        borderWidth: 0,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } },
+                    cutout: '65%'
+                }
+            });
+
+            // Monthly Chart
+            const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+            const monthlyCounts = new Array(12).fill(0);
+            const currentYear = new Date().getFullYear();
+            orders.forEach(o => {
+                const d = new Date(o.created_at);
+                if(d.getFullYear() === currentYear) monthlyCounts[d.getMonth()]++;
+            });
+            new Chart(document.getElementById('monthlyChart'), {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Jumlah Pesanan',
+                        data: monthlyCounts,
+                        backgroundColor: 'rgba(180,83,9,0.15)',
+                        borderColor: '#b45309',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+                }
+            });
+
+            // Recent Orders
+            const recentOrders = orders.slice(0, 5);
+            const statusColors = { pending: 'bg-yellow-100 text-yellow-700', paid: 'bg-blue-100 text-blue-700', validated: 'bg-green-100 text-green-700', cancelled: 'bg-red-100 text-red-700' };
+            const recentList = document.getElementById('recentOrdersList');
+            recentList.innerHTML = recentOrders.length ? recentOrders.map(o => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">#${o.id} — ${o.user_name || 'User'}</p>
+                        <p class="text-xs text-gray-500">${new Date(o.created_at).toLocaleDateString('id-ID')}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-gray-800 text-sm">Rp ${parseFloat(o.total_amount).toLocaleString('id-ID')}</p>
+                        <span class="text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[o.status] || ''}">${o.status}</span>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-gray-400 text-sm text-center py-4">Belum ada pesanan</p>';
+
+            // Top Products (count from orders)
+            const productCount = {};
+            // Use products as fallback
+            products.slice(0,5).forEach((p,i) => {
+                document.getElementById('topProductsList').innerHTML += `
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center flex-shrink-0">${i+1}</span>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-gray-800 text-sm truncate">${p.name}</p>
+                            <p class="text-xs text-gray-500">Stok: ${p.stock}</p>
+                        </div>
+                        <p class="font-bold text-primary text-sm flex-shrink-0">Rp ${parseFloat(p.price).toLocaleString('id-ID')}</p>
+                    </div>
+                `;
+            });
+            if(!products.length) document.getElementById('topProductsList').innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Belum ada produk</p>';
+
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '/pages/auth/login.html';
+    }
+
+    loadDashboard();
+</script>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (!sidebar || !overlay) return;
+        const isOpen = !sidebar.classList.contains('-translate-x-full');
+        if (isOpen) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        } else {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+    }
+    // Tutup sidebar jika klik nav item di mobile
+    document.querySelectorAll('#sidebar nav a, #sidebar nav button').forEach(el => {
+        el.addEventListener('click', () => {
+            if (window.innerWidth < 768) toggleSidebar();
+        });
+    });
+</script>
+</body>
+</html>

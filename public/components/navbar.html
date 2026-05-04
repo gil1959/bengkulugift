@@ -1,0 +1,71 @@
+<nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.location.href='/'">
+                <img src="/img/logo.png" alt="BengkuluGift Logo" class="w-10 h-10 object-contain">
+                <span class="font-display font-bold text-xl text-primary">BengkuluGift</span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex flex-1 justify-center items-center space-x-8">
+                <a href="/" class="text-gray-600 hover:text-primary font-medium transition-colors">Beranda</a>
+                <a href="/#kategori" class="text-gray-600 hover:text-primary font-medium transition-colors">Kategori</a>
+                <a href="/products.html" class="text-gray-600 hover:text-primary font-medium transition-colors">Produk</a>
+                <a href="/#ulasan" class="text-gray-600 hover:text-primary font-medium transition-colors">Ulasan</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center space-x-5">
+                <!-- Cart -->
+                <button class="relative p-2 text-gray-600 hover:text-primary transition-colors group" onclick="typeof openCart === 'function' ? openCart() : (window.location.href = localStorage.getItem('role') === 'admin' ? '/pages/admin/dashboard.html' : '/pages/user/dashboard.html')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span id="cartCount" class="absolute top-0 right-0 -mt-1 -mr-1 bg-primary text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                </button>
+
+                <!-- Desktop Auth -->
+                <div class="hidden md:flex items-center space-x-3">
+                    <div id="guestMenu" class="flex items-center space-x-3">
+                        <button onclick="window.location.href='/pages/auth/login.html'"
+                            class="px-4 py-2 text-primary font-medium hover:bg-accent rounded-lg transition-colors">Masuk</button>
+                        <button onclick="window.location.href='/pages/auth/register.html'"
+                            class="px-5 py-2 bg-primary text-white font-medium rounded-lg hover:bg-secondary shadow-lg shadow-primary/30 transition-all transform hover:-translate-y-0.5">Daftar</button>
+                    </div>
+                    <div id="userMenu" class="hidden items-center space-x-3 text-sm font-bold text-gray-700">
+                        <a id="userNameDisplay" onclick="window.location.href = localStorage.getItem('role') === 'admin' ? '/pages/admin/dashboard.html' : '/pages/user/dashboard.html'" class="cursor-pointer hover:text-primary transition-colors"></a>
+                        <button onclick="logout()"
+                            class="px-4 py-2 text-red-500 hover:bg-red-50 font-medium rounded-lg transition-colors">Keluar</button>
+                    </div>
+                </div>
+
+                <!-- Mobile Hamburger -->
+                <button class="md:hidden p-2 text-gray-600 hover:text-primary" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-100 py-4 space-y-1 pb-4">
+            <a href="/" class="block px-4 py-2 text-gray-600 hover:text-primary font-medium rounded-lg">Beranda</a>
+            <a href="/#kategori" class="block px-4 py-2 text-gray-600 hover:text-primary font-medium rounded-lg">Kategori</a>
+            <a href="/products.html" class="block px-4 py-2 text-gray-600 hover:text-primary font-medium rounded-lg">Produk</a>
+            <a href="/#ulasan" class="block px-4 py-2 text-gray-600 hover:text-primary font-medium rounded-lg">Ulasan</a>
+            <hr class="border-gray-100 my-2">
+            <div id="mobileGuestMenu">
+                <a href="/pages/auth/login.html" class="block px-4 py-2 text-primary font-medium">Masuk</a>
+                <a href="/pages/auth/register.html" class="block px-4 py-2 text-gray-600 font-medium">Daftar</a>
+            </div>
+            <div id="mobileUserMenu" class="hidden">
+                <a id="mobileUserNameDisplay" onclick="window.location.href = localStorage.getItem('role') === 'admin' ? '/pages/admin/dashboard.html' : '/pages/user/dashboard.html'" class="block px-4 py-2 text-gray-700 font-bold cursor-pointer"></a>
+                <button onclick="logout()" class="block w-full text-left px-4 py-2 text-red-500 font-medium">Keluar</button>
+            </div>
+        </div>
+    </div>
+</nav>

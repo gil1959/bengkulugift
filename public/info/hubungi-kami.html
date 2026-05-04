@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungi Kami - BengkuluGift</title>
+    <meta name="description"
+        content="Hubungi tim BengkuluGift untuk bantuan, pertanyaan, atau kemitraan. Kami siap membantu Anda 24/7.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#b45309', secondary: '#d97706', accent: '#fef3c7', background: '#fcfcfc' }, fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] } } } }</script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #b45309;
+            box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-slate-700">
+
+    <!-- Navbar -->
+    <div id="site-navbar"></div>
+
+    <!-- Hero -->
+    <section class="pt-28 pb-16 bg-gradient-to-br from-amber-50 via-white to-orange-50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 bg-accent rounded-full text-primary font-medium text-sm mb-6">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Tim Kami Siap Membantu
+            </div>
+            <h1 class="font-display font-bold text-4xl md:text-5xl text-gray-900 mb-4">Hubungi Kami</h1>
+            <p class="text-lg text-gray-500 max-w-2xl mx-auto">Punya pertanyaan, keluhan, atau ingin berkolaborasi? Kami
+                dengan senang hati akan membantu Anda sesegera mungkin.</p>
+        </div>
+    </section>
+
+    <!-- Contact Cards + Form -->
+    <section class="py-16">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+
+                <!-- Left: Contact Info -->
+                <div class="space-y-5">
+                    <h2 class="font-display font-bold text-xl text-gray-900 mb-6">Informasi Kontak</h2>
+
+                    <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+                        <div class="w-11 h-11 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800 text-sm">Email</p>
+                            <p class="text-gray-500 text-sm mt-0.5">bengkulugift@gmail.com</p>
+                            <p class="text-gray-400 text-xs mt-1">Respon dalam 1x24 jam kerja</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+                        <div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800 text-sm">WhatsApp</p>
+                            <p class="text-gray-500 text-sm mt-0.5">+62 812-3456-7890</p>
+                            <p class="text-gray-400 text-xs mt-1">Senin - Sabtu, 08.00 - 17.00 WIB</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+                        <div class="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800 text-sm">Alamat</p>
+                            <p class="text-gray-500 text-sm mt-0.5 leading-relaxed"> Jalan WR Supratman, Kandang Limun,
+                                Kec. Muara Bangkahulu, Kota Bengkulu</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+                        <div class="w-11 h-11 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800 text-sm">Jam Operasional</p>
+                            <p class="text-gray-500 text-sm mt-0.5">Senin - Jumat: 08.00 - 17.00 WIB</p>
+                            <p class="text-gray-500 text-sm">Sabtu: 09.00 - 14.00 WIB</p>
+                            <p class="text-gray-400 text-xs mt-1">Minggu & Hari Libur: Tutup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Form -->
+                <div class="md:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                        <h2 class="font-display font-bold text-2xl text-gray-900 mb-2">Kirim Pesan</h2>
+                        <p class="text-gray-500 text-sm mb-8">Isi formulir di bawah dan tim kami akan menghubungi Anda
+                            secepatnya.</p>
+
+                        <form id="contactForm" onsubmit="submitForm(event)" class="space-y-5">
+                            <div class="grid md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap <span
+                                            class="text-red-400">*</span></label>
+                                    <input type="text" id="contactName" required
+                                        placeholder="Masukkan nama lengkap Anda"
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email <span
+                                            class="text-red-400">*</span></label>
+                                    <input type="email" id="contactEmail" required placeholder="email@contoh.com"
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor WhatsApp</label>
+                                <input type="tel" id="contactPhone" placeholder="+62 8xx-xxxx-xxxx"
+                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Topik Pesan <span
+                                        class="text-red-400">*</span></label>
+                                <select id="contactTopic" required
+                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all bg-white">
+                                    <option value="">Pilih topik pesan...</option>
+                                    <option value="pesanan">Pertanyaan tentang Pesanan</option>
+                                    <option value="pembayaran">Masalah Pembayaran</option>
+                                    <option value="produk">Informasi Produk</option>
+                                    <option value="pengiriman">Status Pengiriman</option>
+                                    <option value="kemitraan">Kemitraan / Kerjasama</option>
+                                    <option value="lainnya">Lainnya</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Pesan <span
+                                        class="text-red-400">*</span></label>
+                                <textarea id="contactMessage" required rows="5"
+                                    placeholder="Ceritakan pertanyaan atau kebutuhan Anda secara detail..."
+                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm transition-all resize-none"></textarea>
+                            </div>
+                            <div id="formAlert" class="hidden rounded-xl p-4 text-sm"></div>
+                            <button type="submit" id="submitBtn"
+                                class="w-full py-3.5 bg-primary hover:bg-secondary text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                                Kirim Pesan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <div id="site-footer"></div>
+
+    <script src="/js/component-loader.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        async function submitForm(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const alert = document.getElementById('formAlert');
+            
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const phone = document.getElementById('contactPhone').value;
+            const topic = document.getElementById('contactTopic').value;
+            const message = document.getElementById('contactMessage').value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Mengirim...';
+            
+            try {
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, topic, message })
+                });
+                
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert.classList.remove('hidden');
+                    alert.className = 'rounded-xl p-4 text-sm bg-green-50 border border-green-200 text-green-800 flex items-center gap-2';
+                    alert.innerHTML = '<svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ' + data.message;
+                    btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Pesan Terkirim';
+                    btn.className = btn.className.replace('bg-primary hover:bg-secondary', 'bg-green-600 cursor-not-allowed');
+                    document.getElementById('contactForm').reset();
+                } else {
+                    alert.classList.remove('hidden');
+                    alert.className = 'rounded-xl p-4 text-sm bg-red-50 border border-red-200 text-red-800 flex items-center gap-2';
+                    alert.innerHTML = 'Gagal: ' + data.message;
+                    btn.disabled = false;
+                    btn.innerHTML = 'Coba Lagi';
+                }
+            } catch (error) {
+                alert.classList.remove('hidden');
+                alert.className = 'rounded-xl p-4 text-sm bg-red-50 border border-red-200 text-red-800 flex items-center gap-2';
+                alert.innerHTML = 'Terjadi kesalahan sistem.';
+                btn.disabled = false;
+                btn.innerHTML = 'Coba Lagi';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

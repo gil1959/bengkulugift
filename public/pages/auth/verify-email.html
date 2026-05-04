@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Email - BengkuluGift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#b45309',secondary:'#92400e',accent:'#fef3c7'}}}}</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+        .otp-input { width: 52px; height: 60px; font-size: 28px; font-weight: 700; text-align: center; border: 2px solid #e5e7eb; border-radius: 12px; transition: all 0.2s; outline: none; }
+        .otp-input:focus { border-color: #b45309; box-shadow: 0 0 0 3px rgba(180,83,9,0.15); }
+        .otp-input.filled { border-color: #b45309; background: #fef3c7; color: #b45309; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+        .shake { animation: shake 0.4s ease; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        .fade-in { animation: fadeInUp 0.5s ease both; }
+    </style>
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md fade-in">
+        <!-- Card -->
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-primary to-secondary p-8 text-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10" style="background-image:url('https://www.transparenttextures.com/patterns/cubes.png')"></div>
+                <div class="relative z-10">
+                    <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h1 class="font-display font-bold text-2xl text-white mb-1">Verifikasi Email</h1>
+                    <p class="text-amber-200 text-sm">Kode OTP telah dikirim ke</p>
+                    <p id="emailDisplay" class="text-white font-semibold mt-1 text-sm">-</p>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="p-8">
+                <p class="text-gray-500 text-center text-sm mb-8">Masukkan 6 digit kode OTP yang dikirim ke email Anda</p>
+
+                <!-- OTP Inputs -->
+                <div id="otpContainer" class="flex gap-3 justify-center mb-8">
+                    <input type="text" maxlength="1" class="otp-input" id="otp0" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" id="otp1" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" id="otp2" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" id="otp3" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" id="otp4" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" id="otp5" inputmode="numeric">
+                </div>
+
+                <!-- Timer -->
+                <div class="text-center mb-6">
+                    <p class="text-gray-500 text-sm">Kode kedaluwarsa dalam <span id="timer" class="font-bold text-primary">15:00</span></p>
+                </div>
+
+                <!-- Submit Button -->
+                <button id="verifyBtn" onclick="verifyOTP()" class="w-full bg-gradient-to-r from-primary to-secondary text-white font-display font-bold py-4 rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/30 text-lg">
+                    Verifikasi Email
+                </button>
+
+                <!-- Resend -->
+                <div class="mt-6 text-center">
+                    <p class="text-gray-500 text-sm">Tidak menerima kode?</p>
+                    <button id="resendBtn" onclick="resendOTP()" class="text-primary font-semibold hover:text-secondary mt-1 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        Kirim Ulang OTP
+                    </button>
+                    <p id="resendTimer" class="text-gray-400 text-xs mt-1">Bisa kirim ulang dalam <span id="resendCountdown">60</span> detik</p>
+                </div>
+
+                <!-- Back to Register -->
+                <div class="mt-6 pt-6 border-t border-gray-100 text-center">
+                    <a href="/pages/auth/register.html" class="text-gray-400 hover:text-gray-600 text-sm transition-colors">← Kembali ke Registrasi</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brand -->
+        <div class="text-center mt-6">
+            <a href="/" class="text-gray-500 hover:text-primary font-display font-semibold transition-colors">BengkuluGift</a>
+        </div>
+    </div>
+
+    <script>
+        // Get email from URL or localStorage
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get('email') || localStorage.getItem('pendingEmail');
+
+        if (!email) {
+            window.location.href = '/pages/auth/register.html';
+        }
+
+        document.getElementById('emailDisplay').textContent = email;
+
+        // OTP Input Logic
+        const inputs = document.querySelectorAll('.otp-input');
+        inputs.forEach((input, idx) => {
+            input.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/\D/g, '');
+                e.target.value = val;
+                if (val.length > 0) {
+                    e.target.classList.add('filled');
+                    if (idx < 5) inputs[idx + 1].focus();
+                } else {
+                    e.target.classList.remove('filled');
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && idx > 0) {
+                    inputs[idx - 1].focus();
+                    inputs[idx - 1].value = '';
+                    inputs[idx - 1].classList.remove('filled');
+                }
+            });
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                paste.split('').forEach((char, i) => {
+                    if (inputs[i]) {
+                        inputs[i].value = char;
+                        inputs[i].classList.add('filled');
+                    }
+                });
+                if (paste.length === 6) inputs[5].focus();
+            });
+        });
+
+        // Countdown Timer (15 min)
+        let timeLeft = 15 * 60;
+        const timerEl = document.getElementById('timer');
+        const countdown = setInterval(() => {
+            timeLeft--;
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${m}:${s}`;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerEl.textContent = 'Kedaluwarsa';
+                timerEl.classList.add('text-red-500');
+                timerEl.classList.remove('text-primary');
+            }
+        }, 1000);
+
+        // Resend Timer (60s)
+        let resendLeft = 60;
+        const resendBtn = document.getElementById('resendBtn');
+        const resendCountdown = document.getElementById('resendCountdown');
+        const resendInterval = setInterval(() => {
+            resendLeft--;
+            resendCountdown.textContent = resendLeft;
+            if (resendLeft <= 0) {
+                clearInterval(resendInterval);
+                resendBtn.disabled = false;
+                document.getElementById('resendTimer').classList.add('hidden');
+            }
+        }, 1000);
+
+        async function verifyOTP() {
+            const otp = Array.from(inputs).map(i => i.value).join('');
+            if (otp.length < 6) {
+                document.getElementById('otpContainer').classList.add('shake');
+                setTimeout(() => document.getElementById('otpContainer').classList.remove('shake'), 400);
+                return Swal.fire({ icon: 'warning', title: 'Kode Belum Lengkap', text: 'Masukkan 6 digit kode OTP', confirmButtonColor: '#b45309' });
+            }
+
+            const btn = document.getElementById('verifyBtn');
+            btn.disabled = true;
+            btn.textContent = 'Memverifikasi...';
+
+            try {
+                const res = await fetch('/api/auth/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.removeItem('pendingEmail');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Email Terverifikasi!',
+                        text: 'Akun Anda berhasil dibuat. Silakan login.',
+                        confirmButtonColor: '#b45309',
+                        confirmButtonText: 'Login Sekarang'
+                    }).then(() => window.location.href = '/pages/auth/login.html');
+                } else {
+                    document.getElementById('otpContainer').classList.add('shake');
+                    setTimeout(() => document.getElementById('otpContainer').classList.remove('shake'), 400);
+                    Swal.fire({ icon: 'error', title: 'Verifikasi Gagal', text: data.message, confirmButtonColor: '#b45309' });
+                    inputs.forEach(i => { i.value = ''; i.classList.remove('filled'); });
+                    inputs[0].focus();
+                }
+            } catch (e) {
+                Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Cek koneksi internet Anda' });
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Verifikasi Email';
+            }
+        }
+
+        async function resendOTP() {
+            resendBtn.disabled = true;
+            try {
+                const res = await fetch('/api/auth/resend-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    Swal.fire({ icon: 'success', title: 'OTP Terkirim!', text: 'Kode baru telah dikirim ke email Anda', timer: 2000, showConfirmButton: false });
+                    // Reset resend timer
+                    resendLeft = 60;
+                    document.getElementById('resendTimer').classList.remove('hidden');
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: data.message });
+                    resendBtn.disabled = false;
+                }
+            } catch (e) {
+                Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Cek koneksi internet Anda' });
+                resendBtn.disabled = false;
+            }
+        }
+
+        // Focus first input
+        inputs[0].focus();
+    </script>
+</body>
+</html>

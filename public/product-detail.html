@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk - BengkuluGift</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#b45309',
+                        secondary: '#d97706',
+                        accent: '#fef3c7',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body class="antialiased flex flex-col min-h-screen font-sans bg-[#fcfcfc] text-slate-700">
+
+    <!-- Navbar -->
+    <div id="site-navbar"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <button onclick="history.back()"
+            class="flex items-center gap-2 text-gray-500 hover:text-primary transition-colors font-medium mb-8">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali
+        </button>
+
+        <div id="productDetailContainer" class="hidden">
+            <div
+                class="bg-white rounded-3xl p-6 md:p-10 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col md:flex-row gap-10">
+
+                <!-- Product Image -->
+                <div class="w-full md:w-1/2">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-50 border border-gray-100">
+                        <img id="detailImage" src="/img/default_product.png" alt="Product"
+                            class="w-full h-full object-cover" onerror="this.src='/img/default_product.png'">
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="w-full md:w-1/2 flex flex-col">
+                    <div class="text-xs font-semibold text-primary uppercase tracking-wider mb-2" id="detailCategory">
+                        KATEGORI</div>
+                    <h1 class="text-4xl font-display font-bold text-gray-900 mb-4 leading-tight" id="detailName">Nama
+                        Produk</h1>
+
+                    <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+                        <div class="text-3xl font-bold text-primary" id="detailPrice">Rp 0</div>
+                        <div
+                            class="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-lg text-amber-600 text-sm font-medium border border-amber-100">
+                            <span class="text-amber-400">★</span>
+                            <span id="detailRating">Belum ada ulasan</span>
+                        </div>
+                        <div class="text-sm px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg font-medium border border-gray-200"
+                            id="detailStock">Stok: 0</div>
+                    </div>
+
+                    <div class="mb-8 flex-1">
+                        <h3 class="text-lg font-display font-semibold text-gray-800 mb-3">Deskripsi Produk</h3>
+                        <p class="text-gray-600 leading-relaxed" id="detailDescription">Deskripsi produk tidak tersedia.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4 mt-auto">
+                        <div class="flex items-center border border-gray-200 rounded-xl bg-white p-1 shadow-sm">
+                            <button onclick="changeQty(-1)"
+                                class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-bold text-lg">-</button>
+                            <input type="number" id="detailQty" value="1" min="1"
+                                class="w-16 text-center font-bold text-gray-800 outline-none appearance-none" readonly>
+                            <button onclick="changeQty(1)"
+                                class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-lg transition-colors font-bold text-lg">+</button>
+                        </div>
+                        <button onclick="addToCartDetail()"
+                            class="flex-1 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-xl transition-colors shadow-lg shadow-primary/30 flex items-center justify-center gap-2 text-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Masukkan Keranjang
+                        </button>
+                        <button onclick="toggleFavorite()" id="favBtn"
+                            class="w-14 h-14 border border-gray-200 hover:border-red-400 text-gray-400 hover:text-red-500 hover:bg-red-50 flex items-center justify-center rounded-xl transition-all shadow-sm group">
+                            <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24" id="favIcon">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="mt-16">
+                <h2 class="text-2xl font-display font-bold text-gray-900 mb-8 border-b pb-4">Ulasan Pelanggan</h2>
+                <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingState" class="py-20 text-center text-gray-500">
+            <svg class="w-10 h-10 animate-spin mx-auto text-primary mb-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+            </svg>
+            <p>Memuat detail produk...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="site-footer"></div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl w-full max-w-lg shadow-2xl relative">
+            <button onclick="closeModal('cartModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="text-2xl font-display font-bold text-gray-800 mb-6">Keranjang Saya</h3>
+            <div id="cartItemsList" class="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2"></div>
+            <div class="flex justify-between items-center font-bold text-xl text-gray-800 mb-6 border-t pt-4">
+                <span>Total:</span>
+                <span id="cartTotal" class="text-primary">Rp 0</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="checkout()"
+                    class="flex-1 bg-primary hover:bg-secondary text-white font-medium py-3 rounded-xl transition-colors shadow-lg shadow-primary/30">Checkout
+                    & Pesan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script to handle logic -->
+    <script>
+        const API_URL = '/api';
+        let currentProductId = null;
+        let isFavorite = false;
+
+        function getToken() { return localStorage.getItem('token'); }
+        function getAuthHeaders() { return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` }; }
+
+        function checkAuthState() {
+            const token = getToken();
+            const name = localStorage.getItem('name');
+            const role = localStorage.getItem('role');
+            if (token && name) {
+                document.getElementById('guestMenu').classList.add('hidden');
+                document.getElementById('userMenu').classList.remove('hidden');
+                document.getElementById('userMenu').classList.add('flex');
+
+                const userNameDisplay = document.getElementById('userNameDisplay');
+                userNameDisplay.textContent = `Hi, ${name}`;
+                userNameDisplay.classList.add('cursor-pointer', 'hover:text-primary', 'transition-colors');
+                userNameDisplay.onclick = () => { window.location.href = role === 'admin' ? '/pages/user/dashboard.html' : '/pages/user/dashboard.html'; };
+
+                loadCartCount();
+                checkFavorite();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            localStorage.removeItem('name');
+            window.location.reload();
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openCart() {
+            if (!getToken()) {
+                Swal.fire({ icon: 'warning', title: 'Akses Ditolak', text: 'Silakan login terlebih dahulu!' }).then(() => { window.location.href = '/pages/auth/login.html'; });
+                return;
+            }
+            openModal('cartModal');
+            loadCartItems();
+        }
+
+        function changeQty(delta) {
+            const el = document.getElementById('detailQty');
+            let val = parseInt(el.value) + delta;
+            if (val < 1) val = 1;
+            el.value = val;
+        }
+
+        async function loadProductDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            if (!id) {
+                window.location.href = '/products.html';
+                return;
+            }
+            currentProductId = id;
+
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                if (!res.ok) throw new Error('Product not found');
+                const p = await res.json();
+
+                document.getElementById('detailName').textContent = p.name;
+                document.getElementById('detailCategory').textContent = p.category_name || 'UMUM';
+                document.getElementById('detailPrice').textContent = `Rp ${Number(p.price).toLocaleString('id-ID')}`;
+                document.getElementById('detailStock').textContent = `Stok: ${p.stock}`;
+                document.getElementById('detailDescription').textContent = p.description || 'Tidak ada deskripsi.';
+                document.getElementById('detailImage').src = p.image || '/img/default_product.png';
+
+                document.title = `${p.name} - BengkuluGift`;
+
+                // Load reviews
+                const revRes = await fetch(`/api/reviews/${id}`);
+                const reviews = await revRes.json();
+
+                const revList = document.getElementById('reviewsList');
+                if (reviews.length > 0) {
+                    const avg = reviews.reduce((a, b) => a + b.rating, 0) / reviews.length;
+                    document.getElementById('detailRating').textContent = `${avg.toFixed(1)} / 5.0 (${reviews.length} ulasan)`;
+
+                    revList.innerHTML = reviews.map(r => `
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
+                            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-400 text-xl flex-shrink-0">
+                                ${r.user_name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-1">${r.user_name}</h4>
+                                <div class="flex items-center gap-1 mb-2">
+                                    ${'<span class="text-amber-400">★</span>'.repeat(r.rating)}
+                                    ${'<span class="text-gray-200">★</span>'.repeat(5 - r.rating)}
+                                </div>
+                                <p class="text-sm text-gray-600">${r.comment || '<em class="text-gray-400">Tidak ada komentar</em>'}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    revList.innerHTML = '<div class="col-span-full py-8 text-center text-gray-500">Belum ada ulasan untuk produk ini.</div>';
+                }
+
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('productDetailContainer').classList.remove('hidden');
+
+                checkAuthState();
+            } catch (e) {
+                Swal.fire({ icon: 'error', title: 'Produk Tidak Ditemukan', text: 'Kembali ke halaman produk.' }).then(() => {
+                    window.location.href = '/products.html';
+                });
+            }
+        }
+
+        async function addToCartDetail() {
+            if (!getToken()) {
+                Swal.fire({ icon: 'warning', title: 'Login Diperlukan', text: 'Silakan login terlebih dahulu!' }).then(() => { window.location.href = '/pages/auth/login.html'; });
+                return;
+            }
+            const qty = document.getElementById('detailQty').value;
+            try {
+                const res = await fetch(`${API_URL}/cart`, { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify({ product_id: currentProductId, quantity: qty }) });
+                if (res.ok) {
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Ditambahkan ke keranjang!', timer: 1500, showConfirmButton: false });
+                    loadCartCount();
+                } else {
+                    const data = await res.json();
+                    Swal.fire({ icon: 'error', title: 'Gagal', text: data.message || 'Gagal menambahkan produk' });
+                }
+            } catch (e) { }
+        }
+
+        async function checkFavorite() {
+            if (!getToken() || !currentProductId) return;
+            try {
+                const res = await fetch(`/api/favorites/check/${currentProductId}`, { headers: getAuthHeaders() });
+                const data = await res.json();
+                isFavorite = data.isFavorite;
+                updateFavIcon();
+            } catch (e) { }
+        }
+
+        async function toggleFavorite() {
+            if (!getToken()) {
+                Swal.fire({ icon: 'warning', title: 'Login Diperlukan', text: 'Silakan login untuk menyimpan produk favorit.' });
+                return;
+            }
+            try {
+                if (isFavorite) {
+                    const res = await fetch(`/api/favorites/product/${currentProductId}`, { method: 'DELETE', headers: getAuthHeaders() });
+                    if (res.ok) {
+                        isFavorite = false;
+                        toast('Dihapus dari favorit');
+                    }
+                } else {
+                    const res = await fetch('/api/favorites', { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify({ product_id: currentProductId }) });
+                    if (res.ok) {
+                        isFavorite = true;
+                        toast('Ditambahkan ke favorit');
+                    }
+                }
+                updateFavIcon();
+            } catch (e) { }
+        }
+
+        function updateFavIcon() {
+            const icon = document.getElementById('favIcon');
+            const btn = document.getElementById('favBtn');
+            if (isFavorite) {
+                icon.setAttribute('fill', 'currentColor');
+                icon.classList.add('text-red-500');
+                btn.classList.add('border-red-400', 'bg-red-50');
+            } else {
+                icon.setAttribute('fill', 'none');
+                icon.classList.remove('text-red-500');
+                btn.classList.remove('border-red-400', 'bg-red-50');
+            }
+        }
+
+        function toast(msg) {
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: msg, showConfirmButton: false, timer: 1500 });
+        }
+
+        async function loadCartCount() {
+            try {
+                const res = await fetch(`${API_URL}/cart`, { headers: getAuthHeaders() });
+                const items = await res.json();
+                if (Array.isArray(items)) { document.getElementById('cartCount').textContent = items.reduce((acc, val) => acc + val.quantity, 0); }
+            } catch (e) { }
+        }
+        async function loadCartItems() {
+            try {
+                const res = await fetch(`${API_URL}/cart`, { headers: getAuthHeaders() });
+                const items = await res.json();
+                const list = document.getElementById('cartItemsList');
+                const totalSpan = document.getElementById('cartTotal');
+                list.innerHTML = '';
+                let total = 0;
+                if (!Array.isArray(items) || items.length === 0) {
+                    list.innerHTML = '<p class="text-gray-500 text-center py-4">Keranjang kosong</p>';
+                    totalSpan.textContent = 'Rp 0';
+                    return;
+                }
+                items.forEach(item => {
+                    total += item.price * item.quantity;
+                    list.innerHTML += `
+                        <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                            <div>
+                                <h4 class="font-bold text-gray-800">${item.name}</h4>
+                                <p class="text-sm text-gray-500">Rp ${Number(item.price).toLocaleString('id-ID')} x ${item.quantity}</p>
+                            </div>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500 text-sm font-medium hover:text-red-700 px-2 py-1 bg-red-50 rounded">Hapus</button>
+                        </div>`;
+                });
+                totalSpan.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            } catch (e) { }
+        }
+        async function removeFromCart(id) {
+            try {
+                await fetch(`${API_URL}/cart/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+                loadCartItems();
+                loadCartCount();
+            } catch (e) { }
+        }
+        async function checkout() {
+            try {
+                const res = await fetch(`${API_URL}/orders/checkout`, { method: 'POST', headers: getAuthHeaders() });
+                const data = await res.json();
+                if (res.ok) {
+                    Swal.fire({ icon: 'success', title: 'Checkout Berhasil!', text: 'Mengarahkan ke halaman pembayaran...' }).then(() => { window.location.href = `/pages/user/payment.html?order_id=${data.orderId}`; });
+                } else { Swal.fire({ icon: 'error', title: 'Checkout Gagal', text: data.message || 'Terjadi kesalahan' }); }
+            } catch (e) { }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProductDetail();
+        });
+    </script>
+    <script src="/js/component-loader.js"></script>
+</body>
+
+</html>

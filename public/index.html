@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oleh-Oleh Khas Bengkulu</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#b45309',
+                        secondary: '#d97706',
+                        accent: '#fef3c7',
+                        background: '#fcfcfc',
+                        text: '#334155',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+
+<body class="antialiased flex flex-col min-h-screen font-sans bg-[#fcfcfc] text-slate-700">
+
+    <!-- Navbar -->
+    <div id="site-navbar"></div>
+
+    <!-- Hero Section -->
+    <section
+        class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 overflow-hidden">
+        <div class="flex-1 space-y-8" data-aos="fade-right" data-aos-duration="1000">
+
+            <h1 class="text-5xl md:text-6xl font-display font-bold leading-tight text-gray-900">
+                Keistimewaan <br>
+                <span class="text-primary">Bengkulu</span> di Genggaman Anda
+            </h1>
+            <p class="text-lg text-gray-600 leading-relaxed max-w-xl">
+                Temukan berbagai oleh-oleh khas Bengkulu dari makanan tradisional, kerajinan tangan, hingga kain besurek
+                dengan kualitas terbaik dan harga terjangkau.
+            </p>
+            <div class="flex items-center gap-4 pt-4">
+                <a href="#produk"
+                    class="px-8 py-3.5 bg-primary text-white font-medium rounded-xl hover:bg-secondary shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                    Mulai Belanja
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="flex-1 relative" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+            <!-- Decorative shape background -->
+            <div class="absolute inset-0 bg-accent rounded-full blur-3xl opacity-50 transform scale-110"></div>
+            <div class="relative grid grid-cols-2 gap-4">
+                <img src="/img/hero_kain.png" alt="Kain Besurek"
+                    class="rounded-2xl shadow-xl w-full h-64 object-cover transform translate-y-8 hover:scale-105 transition-transform duration-500">
+                <img src="/img/hero_kopi.png" alt="Kopi Bengkulu"
+                    class="rounded-2xl shadow-xl w-full h-64 object-cover hover:scale-105 transition-transform duration-500">
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="kategori" class="py-20 bg-gray-50 border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-display font-bold text-gray-900 mb-4">Pilih Kategori</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Temukan produk sesuai dengan keinginan Anda dari berbagai
+                    kategori unggulan kami.</p>
+            </div>
+
+            <div id="categoriesList" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="produk" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12" data-aos="fade-up">
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-gray-900 mb-2">Produk Unggulan</h2>
+                    <p class="text-gray-600">Jelajahi produk oleh-oleh favorit pilihan kami.</p>
+                </div>
+                <a href="/products.html"
+                    class="hidden sm:flex items-center text-primary font-medium hover:text-secondary">
+                    Lihat Semua
+                    <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <div id="productsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            </div>
+        </div>
+    </section>
+
+    <!-- Review/Testimonial Section -->
+    <section id="ulasan" class="py-20 bg-primary text-white overflow-hidden relative">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-display font-bold mb-4">Apa Kata Pelanggan?</h2>
+                <p class="text-accent max-w-2xl mx-auto">Ulasan dari pelanggan setia kami yang telah merasakan langsung
+                    kualitas produk BengkuluGift.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="landingReviewsList">
+                <div class="col-span-full p-8 text-center text-white/60">Memuat ulasan...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="site-footer"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 50,
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-sm');
+            } else {
+                nav.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl w-full max-w-lg">
+            <h3 class="text-2xl font-bold mb-4">Keranjang Saya</h3>
+            <div id="cartItemsList" class="space-y-4 mb-4 max-h-64 overflow-y-auto"></div>
+            <div class="font-bold text-xl mb-4">Total: <span id="cartTotal">Rp 0</span></div>
+            <button onclick="checkout()" class="w-full bg-primary text-white p-2 rounded mb-2">Checkout & Pesan</button>
+            <button onclick="closeModal('cartModal')" class="w-full text-gray-500">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Admin Link for Logged in Admin -->
+    <div id="adminPanelLink"
+        class="hidden fixed bottom-4 right-4 bg-gray-900 text-white p-4 rounded-xl shadow-2xl z-[55]">
+        <h4 class="font-bold mb-2">Admin Dashboard</h4>
+        <button onclick="window.location.href='/pages/admin/'"
+            class="bg-primary px-4 py-2 rounded text-sm w-full">Kelola
+            Toko</button>
+    </div>
+
+
+
+    <script src="/js/component-loader.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

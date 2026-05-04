@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Pengguna - Admin BengkuluGift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#b45309',secondary:'#92400e'}}}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>.font-display{font-family:'Outfit',sans-serif;}</style>
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex h-screen overflow-hidden relative">
+
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white flex flex-col flex-shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="p-5 flex items-center gap-3 border-b border-gray-800">
+            <img src="/img/logo.png" alt="BengkuluGift Logo" class="w-10 h-10 object-contain">
+            <div>
+                <span class="font-display font-bold text-lg">BengkuluGift</span>
+                <p class="text-xs text-gray-400">Admin Panel</p>
+            </div>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="/pages/admin/dashboard.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Dashboard
+            </a>
+            <a href="/pages/admin/" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Validasi Pembayaran
+            </a>
+            <a href="/pages/admin/products.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                Kelola Produk
+            </a>
+            <a href="/pages/admin/categories.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                Kelola Kategori
+            </a>
+            <a href="/pages/admin/users.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl bg-primary/20 text-primary font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Kelola Pengguna
+            </a>
+            <a href="/pages/admin/reviews.html" class="flex items-center gap-3 py-2.5 px-4 rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                Kelola Ulasan
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+            <button onclick="logout()" class="w-full flex items-center gap-2 py-2 px-4 text-red-400 hover:bg-gray-800 rounded-lg transition-colors text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Keluar
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="toggleSidebar()"></div>
+    <div class="flex-1 overflow-y-auto md:ml-64">
+        <div class="bg-white border-b px-4 md:px-8 py-4 flex items-center gap-3 justify-between sticky top-0 z-10">
+        <button class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors flex-shrink-0" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+                <h1 class="font-display font-bold text-2xl text-gray-800">Kelola Pengguna</h1>
+                <p id="userCount" class="text-sm text-gray-500">Memuat...</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <input id="searchInput" type="text" placeholder="Cari pengguna..." oninput="filterUsers()" class="text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 w-48">
+            </div>
+        </div>
+
+        <div class="p-4 md:p-8">
+            <div class="bg-white rounded-2xl shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b bg-gray-50">
+                                <th class="p-4 text-xs font-semibold text-gray-500 uppercase">ID</th>
+                                <th class="p-4 text-xs font-semibold text-gray-500 uppercase">Pengguna</th>
+                                <th class="p-4 text-xs font-semibold text-gray-500 uppercase">Email</th>
+                                <th class="p-4 text-xs font-semibold text-gray-500 uppercase">Role</th>
+                                <th class="p-4 text-xs font-semibold text-gray-500 uppercase">Terdaftar</th>
+                                <th class="p-4 text-xs font-semibold text-gray-500 uppercase text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr><td colspan="6" class="p-8 text-center text-gray-400">Memuat...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (localStorage.getItem('role') !== 'admin') window.location.href = '/';
+
+    const API_URL = '/api';
+    const authHeaders = { 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+    let allUsers = [];
+
+    async function loadUsers() {
+        try {
+            const res = await fetch(API_URL + '/users', { headers: authHeaders });
+            if (!res.ok) throw new Error('Gagal');
+            allUsers = await res.json();
+            document.getElementById('userCount').textContent = `Total ${allUsers.length} pengguna terdaftar`;
+            renderUsers(allUsers);
+        } catch(e) {
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-400">Gagal memuat data pengguna.</td></tr>';
+        }
+    }
+
+    function filterUsers() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = allUsers.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
+        renderUsers(filtered);
+    }
+
+    function renderUsers(users) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        if (!users.length) { tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-gray-400">Tidak ada pengguna ditemukan.</td></tr>'; return; }
+        users.forEach(u => {
+            const date = new Date(u.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+            const initials = u.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+            const roleCls = u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700';
+            tbody.innerHTML += `
+                <tr class="border-b hover:bg-gray-50 transition-colors">
+                    <td class="p-4 text-sm text-gray-400 font-mono">${u.id}</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold flex-shrink-0">${initials}</div>
+                            <span class="font-medium text-gray-800">${u.name}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-sm text-gray-600">${u.email}</td>
+                    <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${roleCls}">${u.role.toUpperCase()}</span></td>
+                    <td class="p-4 text-sm text-gray-500">${date}</td>
+                    <td class="p-4 text-right">
+                        ${u.role !== 'admin' ? `<button onclick="deleteUser(${u.id}, '${u.name}')" class="text-xs px-3 py-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition-colors font-medium">Hapus</button>` : '<span class="text-xs text-gray-300">Protected</span>'}
+                    </td>
+                </tr>`;
+        });
+    }
+
+    async function deleteUser(id, name) {
+        const { isConfirmed } = await Swal.fire({
+            title: `Hapus "${name}"?`,
+            html: '<p class="text-gray-600 text-sm">Semua data pesanan, keranjang, dan ulasan pengguna ini akan ikut terhapus secara permanen.</p>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!'
+        });
+        if (!isConfirmed) return;
+        const res = await fetch(`${API_URL}/users/${id}`, { method: 'DELETE', headers: authHeaders });
+        const data = await res.json();
+        if (res.ok) {
+            Swal.fire({ icon: 'success', title: 'Terhapus!', text: 'Pengguna berhasil dihapus.', timer: 1800, showConfirmButton: false });
+            loadUsers();
+        } else {
+            Swal.fire({ icon: 'error', title: 'Gagal', text: data.message });
+        }
+    }
+
+    function logout() { localStorage.clear(); window.location.href = '/pages/auth/login.html'; }
+    loadUsers();
+</script>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (!sidebar || !overlay) return;
+        const isOpen = !sidebar.classList.contains('-translate-x-full');
+        if (isOpen) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        } else {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+    }
+    // Tutup sidebar jika klik nav item di mobile
+    document.querySelectorAll('#sidebar nav a, #sidebar nav button').forEach(el => {
+        el.addEventListener('click', () => {
+            if (window.innerWidth < 768) toggleSidebar();
+        });
+    });
+</script>
+</body>
+</html>
