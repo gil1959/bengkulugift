@@ -225,13 +225,27 @@
                 const res = await fetch('/api/categories');
                 const categories = await res.json();
                 const filterContainer = document.getElementById('categoryFilter');
+
+                // Read category from URL query parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const preselectedCategory = urlParams.get('category');
+
                 categories.forEach(c => {
                     const btn = document.createElement('button');
                     btn.className = 'cat-btn whitespace-nowrap px-5 py-2 rounded-full font-medium text-sm transition-all bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary';
+                    btn.setAttribute('data-category-id', c.id);
                     btn.textContent = c.name;
                     btn.onclick = () => filterProducts(c.id, btn);
                     filterContainer.appendChild(btn);
                 });
+
+                // If a category was pre-selected via URL, activate it
+                if (preselectedCategory) {
+                    const targetBtn = filterContainer.querySelector(`[data-category-id="${preselectedCategory}"]`);
+                    if (targetBtn) {
+                        filterProducts(parseInt(preselectedCategory), targetBtn);
+                    }
+                }
             } catch (e) { }
         }
 
@@ -239,12 +253,27 @@
             try {
                 const res = await fetch('/api/products');
                 allProducts = await res.json();
-                renderProducts(allProducts);
+
+                // Check if a category filter was set (from URL param via loadFilters)
+                if (currentFilter) {
+                    applyFilters();
+                } else {
+                    renderProducts(allProducts);
+                }
             } catch (e) { }
         }
 
         function filterProducts(categoryId, btnElement) {
             currentFilter = categoryId;
+
+            // Update URL without reloading to reflect the current filter
+            const url = new URL(window.location);
+            if (categoryId) {
+                url.searchParams.set('category', categoryId);
+            } else {
+                url.searchParams.delete('category');
+            }
+            window.history.replaceState({}, '', url);
 
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.className = 'cat-btn whitespace-nowrap px-5 py-2 rounded-full font-medium text-sm transition-all bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary';
