@@ -17,13 +17,20 @@ const upload = multer({ storage });
 router.get('/', async (req, res) => {
     try {
         const { category_id } = req.query;
-        let query = 'SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id';
+        let query = `SELECT p.*, c.name as category_name, 
+                     COALESCE(AVG(r.rating), 0) as avg_rating, 
+                     COUNT(r.id) as review_count 
+                     FROM products p 
+                     LEFT JOIN categories c ON p.category_id = c.id 
+                     LEFT JOIN reviews r ON p.id = r.product_id`;
         let params = [];
         
         if (category_id) {
             query += ' WHERE p.category_id = ?';
             params.push(category_id);
         }
+        
+        query += ' GROUP BY p.id ORDER BY p.id DESC';
         
         const [products] = await db.query(query, params);
         res.json(products);
