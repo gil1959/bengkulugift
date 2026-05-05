@@ -79,9 +79,10 @@ async function loadOverview() {
 
     try {
         const res = await fetch('/api/orders/my', { headers: H });
+        if (!res.ok) { console.error('orders/my error:', res.status); return; }
         const orders = await res.json();
         const tbody = document.getElementById('recentOrdersBody');
-        if (!orders.length) { tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 text-sm">Belum ada pesanan</td></tr>'; return; }
+        if (!Array.isArray(orders) || !orders.length) { tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 text-sm">Belum ada pesanan</td></tr>'; return; }
         tbody.innerHTML = orders.slice(0, 5).map(o => `
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                 <td class="p-4 text-sm font-medium text-gray-800">#${o.id}</td>
@@ -89,7 +90,7 @@ async function loadOverview() {
                 <td class="p-4 text-sm font-bold text-gray-800">${fmt(o.total_amount)}</td>
                 <td class="p-4">${statusBadge(o.status)}</td>
             </tr>`).join('');
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error('loadOverview orders error:', e); }
 }
 
 // ============ ORDERS ============
@@ -98,8 +99,13 @@ async function loadOrders() {
     tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-gray-400">Memuat...</td></tr>';
     try {
         const res = await fetch('/api/orders/my', { headers: H });
+        if (!res.ok) {
+            console.error('loadOrders error:', res.status, await res.text());
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-400">Gagal memuat pesanan (Error ' + res.status + ')</td></tr>';
+            return;
+        }
         const orders = await res.json();
-        if (!orders.length) {
+        if (!Array.isArray(orders) || !orders.length) {
             tbody.innerHTML = '<tr><td colspan="6" class="p-12 text-center text-gray-500"><svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><p>Belum ada pesanan. <a href="/products.html" class="text-primary hover:text-secondary font-medium transition-colors">Belanja sekarang!</a></p></td></tr>';
             return;
         }
@@ -114,7 +120,7 @@ async function loadOrders() {
             else if (o.status === 'dikirim') actions = `<button class="text-xs px-3 py-1.5 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium shadow-sm w-full text-center" onclick="completeOrder(${o.id})">Diterima</button>`;
             else if (o.status === 'selesai') {
                 const pid = o.first_product_id || 1;
-                actions = `<button class="text-xs px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium shadow-sm w-full text-center" onclick="openReviewModal(${pid},'${(o.product_names || 'Produk').split(',')[0].trim()}')">Beri Ulasan</button>`;
+                actions = `<button class="text-xs px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium shadow-sm w-full text-center" onclick="openReviewModal(${pid},'${(o.product_names || 'Produk').split(',')[0].trim().replace(/'/g, "\\'")}')">Beri Ulasan</button>`;
             }
             return `
                 <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
@@ -126,7 +132,7 @@ async function loadOrders() {
                     <td class="p-4 text-right">${actions}</td>
                 </tr>`;
         }).join('');
-    } catch (e) { toast('Gagal memuat pesanan', 'error'); }
+    } catch (e) { console.error('loadOrders catch:', e); toast('Gagal memuat pesanan', 'error'); }
 }
 
 async function cancelOrder(id) {
@@ -417,6 +423,46 @@ async function changePassword(e) {
         if (res.ok) { toast('Password berhasil diubah!', 'success'); document.getElementById('passwordForm').reset(); }
         else toast(d.message || 'Gagal mengubah password', 'error');
     } catch (e) { toast('Kesalahan jaringan', 'error'); }
+}
+
+// ============ PAYMENT MODAL ============
+function openPaymentModal(orderId, totalAmount) {
+    document.getElementById('payOrderId').value = orderId;
+    document.getElementById('payTotal').textContent = fmt(totalAmount);
+    document.getElementById('payFileName').textContent = 'Klik untuk pilih gambar (JPG/PNG)';
+    document.getElementById('payFile').value = '';
+    openModal('payModal');
+}
+
+async function submitPayment() {
+    const orderId = document.getElementById('payOrderId').value;
+    const fileInput = document.getElementById('payFile');
+    if (!fileInput.files[0]) {
+        toast('Pilih file bukti pembayaran terlebih dahulu', 'error');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('payment_proof', fileInput.files[0]);
+
+    try {
+        const res = await fetch(`/api/orders/${orderId}/payment`, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: formData
+        });
+        const data = await res.json();
+        if (res.ok) {
+            toast('Bukti pembayaran berhasil diupload!', 'success');
+            closeModal('payModal');
+            loadOrders();
+            loadOverview();
+        } else {
+            toast(data.message || 'Gagal upload bukti pembayaran', 'error');
+        }
+    } catch (e) {
+        toast('Kesalahan jaringan', 'error');
+    }
 }
 
 // ============ LOGOUT ============

@@ -18,12 +18,17 @@ const upload = multer({ storage });
 router.get('/all', auth, isAdmin, async (req, res) => {
     try {
         const [orders] = await db.query(
-            `SELECT o.*, u.name as user_name, u.email as user_email,
-             p.bukti_pembayaran as payment_proof,
-             p.status_pembayaran
+            `SELECT o.*, MAX(u.name) as user_name, MAX(u.email) as user_email,
+             GROUP_CONCAT(CONCAT(oi.quantity,'x ',pr.name) SEPARATOR ', ') as items_summary,
+             MAX(pay.bukti_pembayaran) as payment_proof,
+             MAX(pay.status_pembayaran) as status_pembayaran,
+             MAX(pay.id) as payment_id
              FROM orders o
              LEFT JOIN users u ON o.user_id = u.id
-             LEFT JOIN payments p ON p.order_id = o.id
+             LEFT JOIN order_items oi ON o.id = oi.order_id
+             LEFT JOIN products pr ON oi.product_id = pr.id
+             LEFT JOIN payments pay ON pay.order_id = o.id
+             GROUP BY o.id
              ORDER BY o.created_at DESC`
         );
         res.json(orders);
@@ -39,8 +44,8 @@ router.get('/my', auth, async (req, res) => {
             `SELECT o.*,
              GROUP_CONCAT(pr.name SEPARATOR ', ') as product_names,
              MAX(oi.product_id) as first_product_id,
-             pay.bukti_pembayaran as payment_proof,
-             pay.status_pembayaran
+             MAX(pay.bukti_pembayaran) as payment_proof,
+             MAX(pay.status_pembayaran) as status_pembayaran
              FROM orders o
              LEFT JOIN order_items oi ON o.id = oi.order_id
              LEFT JOIN products pr ON oi.product_id = pr.id
@@ -60,11 +65,11 @@ router.get('/my', auth, async (req, res) => {
 router.get('/', auth, isAdmin, async (req, res) => {
     try {
         const [orders] = await db.query(
-            `SELECT o.*, u.name as user_name, u.email as user_email,
+            `SELECT o.*, MAX(u.name) as user_name, MAX(u.email) as user_email,
              GROUP_CONCAT(CONCAT(oi.quantity,'x ',pr.name) SEPARATOR ', ') as items_summary,
-             pay.bukti_pembayaran as payment_proof,
-             pay.status_pembayaran,
-             pay.id as payment_id
+             MAX(pay.bukti_pembayaran) as payment_proof,
+             MAX(pay.status_pembayaran) as status_pembayaran,
+             MAX(pay.id) as payment_id
              FROM orders o
              LEFT JOIN users u ON o.user_id = u.id
              LEFT JOIN order_items oi ON o.id = oi.order_id

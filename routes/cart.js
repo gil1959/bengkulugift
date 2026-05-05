@@ -7,7 +7,7 @@ const { auth } = require('../middleware/auth');
 router.get('/', auth, async (req, res) => {
     try {
         const [cartItems] = await db.query(
-            'SELECT c.id, c.quantity, p.name, p.price, p.image, p.id as product_id FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?',
+            'SELECT c.id, c.quantity, p.name, p.price, p.image as product_image, p.id as product_id FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?',
             [req.user.id]
         );
         res.json(cartItems);
